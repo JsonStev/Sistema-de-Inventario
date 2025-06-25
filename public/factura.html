@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sistema de Facturación</title>
+  <link rel="stylesheet" href="./css/estilos.css" />
+</head>
+<body>
+
+  <!-- BARRA SUPERIOR -->
+  <header class="barra-superior">
+    <div class="logo">🧾 SISIN</div>
+    <input type="text" placeholder="Buscar producto..." class="buscador" id="buscador">
+    <nav class="nav">
+      <button><a href="inventario.html">Inventario</a></button>
+      <button><a href="factura.html">Factura</a></button>
+      <button id="Cerrar">Cerrar sesión</button>
+    </nav>
+    <div class="usuario">👤</div>
+  </header>
+
+  <main class="contenedor">
+    <!-- Productos -->
+    <section class="productos" id="productos"></section>
+
+    <!-- Factura -->
+    <section class="factura">
+      <h2>Factura</h2>
+      <div id="facturaItems"></div>
+
+      <div class="total">
+        <p><strong>Total:</strong> C$<span id="total">0</span></p>
+        <label>Recibe:
+          <input type="number" id="recibe" placeholder="C$0">
+        </label>
+        <p><strong>Cambio:</strong> C$<span id="cambio">0</span></p>
+        <button id="finalizar">Finalizar</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/factura.js"></script>
+  <script src="js/logout.js"></script>
+</body>
+</html>

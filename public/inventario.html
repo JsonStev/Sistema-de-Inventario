@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sistema de Facturación</title>
+  <link rel="stylesheet" href="./css/estilos.css" />
+</head>
+<body>
+
+  <!-- BARRA SUPERIOR -->
+  <header class="barra-superior">
+    <div class="logo">🧾 SISIN</div>
+    <input type="text" placeholder="Buscar producto..." class="buscador" id="buscador">
+    <nav class="nav">
+      <button><a href="inventario.html">Inventario</a></button>
+      <button><a href="factura.html">Factura</a></button>
+      <button id="Cerrar">Cerrar sesión</button>
+    </nav>
+    <div class="usuario">👤</div>
+  </header>
+
+  <main class="contenedor">
+    <!-- Productos -->
+    <section class="productos" id="productos"></section>
+
+    <h3>Agregar nuevo producto</h3>
+<form id="formProducto" enctype="multipart/form-data">
+  <input name="nombre" placeholder="Nombre del producto" required><br>
+  <input name="descripcion" placeholder="Descripción"><br>
+  <input name="precio" type="number" placeholder="Precio" required><br>
+  <input name="imagen" type="file" accept="image/*"><br>
+  <button type="submit">Agregar Producto</button>
+</form>
+
+ 
+  <script src="js/logout.js"></script>
+  <script src="js/inventario.js"></script>
+</body>
+</html>

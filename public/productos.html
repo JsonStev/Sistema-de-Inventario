@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mis Productos</title>
+</head>
+<body>
+  <h1>Gestión de Productos</h1>
+
+  <button id="Cerrar">Cerrar Sesion</button>
+
+  <form id="formProducto">
+    <input name="nombre" placeholder="Nombre" required>
+    <input name="descripcion" placeholder="Descripción">
+    <input name="cantidad" type="number" placeholder="Cantidad" required>
+    <input name="precio" type="number" placeholder="Precio" required>
+    <button>Guardar</button>
+  </form>
+
+  <h2>Lista</h2>
+  <ul id="listaProductos"></ul>
+
+  <script src="js/productos.js"></script>
+  <script src="/public/main.js"></script>
+</body>
+</html>
