@@ -6,19 +6,6 @@
   <title>Sistema de Facturación</title>
   <link rel="stylesheet" href="./css/estilos.css" />
 </head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script>
-  document.getElementById('descargarFactura').addEventListener('click', function () {
-    const factura = document.getElementById('factura');
-
-    html2canvas(factura).then(canvas => {
-      const link = document.createElement('a');
-      link.download = 'factura.png';
-      link.href = canvas.toDataURL();
-      link.click();
-    });
-  });
-</script>
 
 <body>
 
@@ -50,7 +37,7 @@
         </label>
         <p><strong>Cambio:</strong> C$<span id="cambio">0</span></p>
         <button id="finalizar">Finalizar</button>
-        <button id="descargarFactura">Descargar Factura</button>
+        
 
       </div>
     </section>
@@ -59,4 +46,24 @@
   <script src="js/factura.js"></script>
   <script src="js/logout.js"></script>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+  document.getElementById('finalizar').addEventListener('click', function () {
+    const factura = document.getElementById('factura');
+
+    // Asegurarse de que la factura esté visible completamente
+    factura.scrollIntoView();
+
+    // Esperar un poco si es necesario actualizar datos antes
+    setTimeout(() => {
+      html2canvas(factura, { scale: 2 }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'factura.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }, 500); // 0.5 segundos de espera por si hay cambios visuales
+  });
+</script>
+
 </html>
