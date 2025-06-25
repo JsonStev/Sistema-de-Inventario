@@ -6,6 +6,20 @@
   <title>Sistema de Facturación</title>
   <link rel="stylesheet" href="./css/estilos.css" />
 </head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+  document.getElementById('descargarFactura').addEventListener('click', function () {
+    const factura = document.getElementById('factura');
+
+    html2canvas(factura).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'factura.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  });
+</script>
+
 <body>
 
   <!-- BARRA SUPERIOR -->
@@ -25,7 +39,7 @@
     <section class="productos" id="productos"></section>
 
     <!-- Factura -->
-    <section class="factura">
+    <section class="factura" id="factura">
       <h2>Factura</h2>
       <div id="facturaItems"></div>
 
@@ -36,6 +50,8 @@
         </label>
         <p><strong>Cambio:</strong> C$<span id="cambio">0</span></p>
         <button id="finalizar">Finalizar</button>
+        <button id="descargarFactura">Descargar Factura</button>
+
       </div>
     </section>
   </main>
