@@ -16,4 +16,4 @@ UsuarioSchema.methods.validarPassword = function (passwordPlano) {
   return bcrypt.compare(passwordPlano, this.password);
 };
 
-module.exports = mongoose.model('Usuario', UsuarioSchema);
+module.exports = mongoose.model('USUARIOS', UsuarioSchema);
