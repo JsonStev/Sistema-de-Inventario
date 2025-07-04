@@ -1,0 +1,35 @@
+<!-- public/home.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - Sistema de Inventario</title>
+  <link rel="stylesheet" href="./css/home.css" />
+</head>
+<body>
+  <header>
+    <h1>Bienvenido, <span id="nombreUsuario">Usuario</span></h1>
+    <button onclick="cerrarSesion()">Cerrar sesión</button>
+  </header>
+
+  <main>
+    <section>
+      <h2>Últimos productos agregados</h2>
+      <div id="ultimosProductos" class="grid-productos"></div>
+    </section>
+
+    <section>
+      <h2>Estadísticas</h2>
+      <p>Total de productos: <span id="totalProductos">0</span></p>
+    </section>
+
+    <nav>
+      <a href="/inventario.html">📦 Inventario</a> |
+      <a href="/factura.html">🧾 Facturación</a>
+    </nav>
+  </main>
+
+  <script src="js/home.js"></script>
+</body>
+</html>

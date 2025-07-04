@@ -1,0 +1,37 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #f4f4f4;
+  text-decoration: none;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #2c3e50;
+  color: white;
+  padding: 10px 20px;
+}
+
+section {
+  background: white;
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 8px;
+}
+
+.grid-productos {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.producto-mini {
+  background: #e8e8e8;
+  padding: 10px;
+  border-radius: 6px;
+  text-align: center;
+  width: 120px;
+}

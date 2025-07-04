@@ -14,6 +14,7 @@
     <div class="logo">🧾 SISIN</div>
     <input type="text" placeholder="Buscar producto..." class="buscador" id="buscador">
     <nav class="nav">
+      <button><a href="home.html">Inicio</a></button>
       <button><a href="inventario.html">Inventario</a></button>
       <button><a href="factura.html">Factura</a></button>
       <button id="Cerrar">Cerrar sesión</button>
@@ -36,7 +37,8 @@
           <input type="number" id="recibe" placeholder="C$0">
         </label>
         <p><strong>Cambio:</strong> C$<span id="cambio">0</span></p>
-        <button id="finalizar">Finalizar</button>
+        <button id="finalizar" onclick="confirmarFactura()">Confirmar compra</button>
+
         
 
       </div>
