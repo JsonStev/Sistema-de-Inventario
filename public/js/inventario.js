@@ -7,7 +7,7 @@ formProducto.addEventListener('submit', async (e) => {
 
   const formData = new FormData(formProducto);
 
-  const res = await fetch('/productos', {
+  const res = await fetch('/PRODUCTOS', {
     method: 'POST',
     body: formData
   });
@@ -25,7 +25,7 @@ formProducto.addEventListener('submit', async (e) => {
 
 async function cargarProductos() {
   try {
-    const res = await fetch('/productos');
+    const res = await fetch('/PRODUCTOS');
     const productos = await res.json();
     mostrarProductos(productos);
   } catch (error) {
@@ -118,7 +118,7 @@ async function eliminarProducto(id) {
   if (!confirm('¿Seguro que quieres eliminar este producto?')) return;
 
   try {
-    const res = await fetch(`/productos/${id}`, {
+    const res = await fetch(`/PRODUCTOS/${id}`, {
       method: 'DELETE'
     });
 

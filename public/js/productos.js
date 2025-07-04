@@ -47,12 +47,12 @@ form.addEventListener('submit', async e => {
 });
 
 async function eliminar(id) {
-  await fetch(`/productos/${id}`, { method: 'DELETE' });
+  await fetch(`/PRODUCTOS/${id}`, { method: 'DELETE' });
   cargarProductos();
 }
 
 async function editar(id) {
-  const res = await fetch('/productos');
+  const res = await fetch('/PRODUCTOS');
   const productos = await res.json();
   const p = productos.find(prod => prod._id === id);
   form.nombre.value = p.nombre;

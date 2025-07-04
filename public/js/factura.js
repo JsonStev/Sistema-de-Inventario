@@ -114,7 +114,7 @@ const buscador = document.getElementById("buscador");
 
 async function cargarProductos() {
   try {
-    const res = await fetch('/productos');
+    const res = await fetch('/PRODUCTOS');
     productos = await res.json();
     renderProductos();
   } catch (err) {
