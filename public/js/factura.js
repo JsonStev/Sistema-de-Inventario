@@ -204,6 +204,34 @@ function calcularCambio() {
   }
 }
 
+const confirmarFactura = async () => {
+  if (carrito.length === 0) {
+    alert("No hay productos en el carrito");
+    return;
+  }
+
+  const compras = carrito.map(p => ({
+    id: p.id || p._id,
+    cantidad: p.cantidad
+  }));
+
+  const res = await fetch('/facturar', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ compras })
+  });
+
+  if (res.ok) {
+    alert("Compra realizada exitosamente");
+    carrito = [];
+    renderFactura();
+    cargarProductos(); // actualiza la lista
+  } else {
+    alert("Error al procesar la compra");
+  }
+};
+
+
 // Búsqueda dinámica
 buscador.addEventListener("input", () => {
   const texto = buscador.value.toLowerCase();

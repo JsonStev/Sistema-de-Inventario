@@ -28,7 +28,6 @@ mongoose.connect(process.env.MONGO_URI)
 // Archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 // Guardar Imagenes
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -87,13 +86,29 @@ app.get('/verificar-sesion', (req, res) => {
 const Producto = require('./models/Producto');
 const verificarSesion = require('./middlewares/verificarSesion');
 
+
+
+
 // Obtener todos los productos del usuario
 app.get('/productos', verificarSesion, async (req, res) => {
-  const productos = await Producto.find({ creadoPor: req.session.usuario });
+  const productos = await Producto.find().sort({_id: -1});
   res.json(productos);
 });
 
+app.get('/dashboard', verificarSesion, async (req, res) => {
+  try {
+    const usuario = req.session.usuario;
+    const ultimos = await Producto.find().sort({ _id: -1 }).limit(5);
+    const total = await Producto.countDocuments();
+
+    res.json({ usuario, ultimos, total });
+  } catch (err) {
+    res.status(500).send('Error al cargar dashboard');
+  }
+});
 // Crear producto
+
+
 // app.post('/productos', verificarSesion, async (req, res) => {
 //   const nuevo = new Producto({ ...req.body, creadoPor: req.session.usuario });
 //   await nuevo.save();
@@ -102,23 +117,47 @@ app.get('/productos', verificarSesion, async (req, res) => {
 
 app.post('/productos', verificarSesion, upload.single('imagen'), async (req, res) => {
   try {
-    const { nombre, descripcion, precio } = req.body;
+    const { nombre, descripcion, precio, fechaVencimiento, cantidad } = req.body;
     const imagen = req.file ? '/uploads/' + req.file.filename : ''; // Ruta pública
 
     const nuevoProducto = new Producto({
       nombre,
       descripcion,
-      precio,
+      precio: parseFloat(precio),
       imagen,
+      fechaVencimiento: new Date(fechaVencimiento),
+      cantidad: parseInt(cantidad),
       creadoPor: req.session.usuario
     });
 
     await nuevoProducto.save();
     res.status(201).send('Producto creado');
   } catch (err) {
+    console.error('Error al guardar producto:', err);
     res.status(500).send('Error al guardar producto');
   }
 });
+
+
+// app.post('/productos', verificarSesion, upload.single('imagen'), async (req, res) => {
+//   try {
+//     const { nombre, descripcion, precio } = req.body;
+//     const imagen = req.file ? '/uploads/' + req.file.filename : ''; // Ruta pública
+
+//     const nuevoProducto = new Producto({
+//       nombre,
+//       descripcion,
+//       precio:parseFloat(precio),
+//       imagen,
+//       creadoPor: req.session.usuario
+//     });
+
+//     await nuevoProducto.save();
+//     res.status(201).send('Producto creado');
+//   } catch (err) {
+//     res.status(500).send('Error al guardar producto');
+//   }
+// });
 
 
 // Actualizar producto
@@ -135,6 +174,24 @@ app.delete('/productos/:id', verificarSesion, async (req, res) => {
   await Producto.findOneAndDelete({ _id: req.params.id, creadoPor: req.session.usuario });
   res.send('Producto eliminado');
 });
+
+app.post('/facturar', verificarSesion, async (req, res) => {
+  try {
+    const compras = req.body.compras; // Array de { id, cantidad }
+
+    for (const item of compras) {
+      await Producto.findByIdAndUpdate(item.id, {
+        $inc: { cantidad: -item.cantidad }
+      });
+    }
+
+    res.status(200).send('Factura procesada');
+  } catch (err) {
+    console.error('Error al facturar:', err);
+    res.status(500).send('Error al procesar la factura');
+  }
+});
+
 
 
 

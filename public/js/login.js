@@ -14,5 +14,5 @@ document.getElementById('formLogin').addEventListener('submit', async (e) => {
   const texto = await res.text();
   alert(texto);
 
-  if (res.ok) location.href = '/factura.html'; // página protegida
+  if (res.ok) location.href = '/home.html'; // página protegida
 });
