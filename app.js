@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const multer = require('multer');
 const path = require('path');
+app.use(express.static(path.join(__dirname, 'public')));
 require('dotenv').config();
 
 const Usuario = require('./models/Usuario');
