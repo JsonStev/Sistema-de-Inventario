@@ -47,13 +47,14 @@ function mostrarProductos(productos) {
     <h4>${p.nombre}</h4>
     <p>${p.descripcion}</p>
     <p>Precio: C$${p.precio}</p>
+    <p>Cantidad: ${p.cantidad}</p>
     
-   
     <button onclick='eliminarProducto("${p._id}")'>🗑️ Eliminar</button>
   `;
   contenedor.appendChild(div);
 });
 
+//<p>Vence: ${new Date(p.fechaVencimiento).toLocaleDateString()}</p>
 //<p>Cantidad: ${p.cantidad}</p>
     //<p>Vence: ${new Date(p.fechaVencimiento).toLocaleDateString()}</p>
     // <button onclick='abrirModal(${JSON.stringify(p)})'>✏️ Editar</button>
