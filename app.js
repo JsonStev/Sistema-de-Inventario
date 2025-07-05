@@ -24,7 +24,7 @@ app.use(session({
 
 // Modelos
 const Usuario = require('./models/Usuario');
-const verificarSesion = require('./middlewares/verificarSesion');
+
 
 // MongoDB
 mongoose.connect(process.env.MONGO_URI)
