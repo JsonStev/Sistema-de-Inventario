@@ -1,18 +1,17 @@
 const express = require('express');
 const cors = require('cors');
-app.use(cors());
 const mongoose = require('mongoose');
 const session = require('express-session');
 const multer = require('multer');
 const path = require('path');
-app.use(express.static(path.join(__dirname, 'public')));
 require('dotenv').config();
 
-const Usuario = require('./models/Usuario');
-//const Producto = require('./models/Producto');
-//const verificarSesion = require('./middlewares/verificarSesion');
-
+// Inicializar Express
 const app = express();
+
+// Middlewares
+app.use(cors());
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -23,15 +22,17 @@ app.use(session({
   saveUninitialized: false
 }));
 
-// MongoDB
+// Modelos
+const Usuario = require('./models/Usuario');
+const Producto = require('./models/Producto');
+const verificarSesion = require('./middlewares/verificarSesion');
+
+// Conexión a MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('📦 Conectado a MongoDB'))
-  .catch(err => console.error(err));
+  .catch(err => console.error('❌ Error conectando a MongoDB:', err));
 
-// Archivos estáticos
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Guardar Imagenes
+// Guardar imágenes
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'public/uploads');
@@ -41,9 +42,7 @@ const storage = multer.diskStorage({
     cb(null, uniqueName);
   }
 });
-
 const upload = multer({ storage });
-
 
 // Rutas
 app.post('/registro', async (req, res) => {
@@ -66,35 +65,22 @@ app.post('/login', async (req, res) => {
   res.send('Login exitoso');
 });
 
-// app.get('/logout', (req, res) => {
-//   req.session.destroy(() => {
-//     res.send('Sesión cerrada');
-//   });
-// });
-
 app.get('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) return res.status(500).send('Error al cerrar sesión');
-    res.clearCookie('connect.sid'); // Borra la cookie de sesión
-    res.redirect('/index.html');   // Redirige al login
+    res.clearCookie('connect.sid');
+    res.redirect('/index.html');
   });
 });
-
 
 app.get('/verificar-sesion', (req, res) => {
   if (req.session.usuario) return res.send('Sesión activa');
   res.status(401).send('No autorizado');
 });
 
-const Producto = require('./models/Producto');
-const verificarSesion = require('./middlewares/verificarSesion');
-
-
-
-
-// Obtener todos los productos del usuario
+// Productos
 app.get('/productos', verificarSesion, async (req, res) => {
-  const productos = await Producto.find().sort({_id: -1});
+  const productos = await Producto.find().sort({ _id: -1 });
   res.json(productos);
 });
 
@@ -103,25 +89,16 @@ app.get('/dashboard', verificarSesion, async (req, res) => {
     const usuario = req.session.usuario;
     const ultimos = await Producto.find().sort({ _id: -1 }).limit(5);
     const total = await Producto.countDocuments();
-
     res.json({ usuario, ultimos, total });
   } catch (err) {
     res.status(500).send('Error al cargar dashboard');
   }
 });
-// Crear producto
-
-
-// app.post('/productos', verificarSesion, async (req, res) => {
-//   const nuevo = new Producto({ ...req.body, creadoPor: req.session.usuario });
-//   await nuevo.save();
-//   res.send('Producto creado');
-// });
 
 app.post('/productos', verificarSesion, upload.single('imagen'), async (req, res) => {
   try {
     const { nombre, descripcion, precio, fechaVencimiento, cantidad } = req.body;
-    const imagen = req.file ? '/uploads/' + req.file.filename : ''; // Ruta pública
+    const imagen = req.file ? '/uploads/' + req.file.filename : '';
 
     const nuevoProducto = new Producto({
       nombre,
@@ -141,29 +118,6 @@ app.post('/productos', verificarSesion, upload.single('imagen'), async (req, res
   }
 });
 
-
-// app.post('/productos', verificarSesion, upload.single('imagen'), async (req, res) => {
-//   try {
-//     const { nombre, descripcion, precio } = req.body;
-//     const imagen = req.file ? '/uploads/' + req.file.filename : ''; // Ruta pública
-
-//     const nuevoProducto = new Producto({
-//       nombre,
-//       descripcion,
-//       precio:parseFloat(precio),
-//       imagen,
-//       creadoPor: req.session.usuario
-//     });
-
-//     await nuevoProducto.save();
-//     res.status(201).send('Producto creado');
-//   } catch (err) {
-//     res.status(500).send('Error al guardar producto');
-//   }
-// });
-
-
-// Actualizar producto
 app.put('/productos/:id', verificarSesion, async (req, res) => {
   await Producto.findOneAndUpdate(
     { _id: req.params.id, creadoPor: req.session.usuario },
@@ -172,7 +126,6 @@ app.put('/productos/:id', verificarSesion, async (req, res) => {
   res.send('Producto actualizado');
 });
 
-// Eliminar producto
 app.delete('/productos/:id', verificarSesion, async (req, res) => {
   await Producto.findOneAndDelete({ _id: req.params.id, creadoPor: req.session.usuario });
   res.send('Producto eliminado');
@@ -180,7 +133,7 @@ app.delete('/productos/:id', verificarSesion, async (req, res) => {
 
 app.post('/facturar', verificarSesion, async (req, res) => {
   try {
-    const compras = req.body.compras; // Array de { id, cantidad }
+    const compras = req.body.compras;
 
     for (const item of compras) {
       await Producto.findByIdAndUpdate(item.id, {
@@ -195,14 +148,8 @@ app.post('/facturar', verificarSesion, async (req, res) => {
   }
 });
 
-
-
-
-
-app.listen(process.env.PORT, () =>
-  console.log(`🚀 Servidor en http://localhost:${process.env.PORT}`)
-);
+// Iniciar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
+  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
