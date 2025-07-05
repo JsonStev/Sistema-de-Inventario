@@ -22,17 +22,15 @@ app.use(session({
   saveUninitialized: false
 }));
 
-// Modelos
-const Usuario = require('./models/Usuario');
-const Producto = require('./models/Producto');
-const verificarSesion = require('./middlewares/verificarSesion');
-
-// Conexión a MongoDB
+// MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('📦 Conectado a MongoDB'))
-  .catch(err => console.error('❌ Error conectando a MongoDB:', err));
+  .catch(err => console.error(err));
 
-// Guardar imágenes
+// Archivos estáticos
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Guardar Imagenes
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'public/uploads');
@@ -42,7 +40,9 @@ const storage = multer.diskStorage({
     cb(null, uniqueName);
   }
 });
+
 const upload = multer({ storage });
+
 
 // Rutas
 app.post('/registro', async (req, res) => {
@@ -65,22 +65,35 @@ app.post('/login', async (req, res) => {
   res.send('Login exitoso');
 });
 
+// app.get('/logout', (req, res) => {
+//   req.session.destroy(() => {
+//     res.send('Sesión cerrada');
+//   });
+// });
+
 app.get('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) return res.status(500).send('Error al cerrar sesión');
-    res.clearCookie('connect.sid');
-    res.redirect('/index.html');
+    res.clearCookie('connect.sid'); // Borra la cookie de sesión
+    res.redirect('/index.html');   // Redirige al login
   });
 });
+
 
 app.get('/verificar-sesion', (req, res) => {
   if (req.session.usuario) return res.send('Sesión activa');
   res.status(401).send('No autorizado');
 });
 
-// Productos
+const Producto = require('./models/Producto');
+const verificarSesion = require('./middlewares/verificarSesion');
+
+
+
+
+// Obtener todos los productos del usuario
 app.get('/productos', verificarSesion, async (req, res) => {
-  const productos = await Producto.find().sort({ _id: -1 });
+  const productos = await Producto.find().sort({_id: -1});
   res.json(productos);
 });
 
@@ -89,16 +102,25 @@ app.get('/dashboard', verificarSesion, async (req, res) => {
     const usuario = req.session.usuario;
     const ultimos = await Producto.find().sort({ _id: -1 }).limit(5);
     const total = await Producto.countDocuments();
+
     res.json({ usuario, ultimos, total });
   } catch (err) {
     res.status(500).send('Error al cargar dashboard');
   }
 });
+// Crear producto
+
+
+// app.post('/productos', verificarSesion, async (req, res) => {
+//   const nuevo = new Producto({ ...req.body, creadoPor: req.session.usuario });
+//   await nuevo.save();
+//   res.send('Producto creado');
+// });
 
 app.post('/productos', verificarSesion, upload.single('imagen'), async (req, res) => {
   try {
     const { nombre, descripcion, precio, fechaVencimiento, cantidad } = req.body;
-    const imagen = req.file ? '/uploads/' + req.file.filename : '';
+    const imagen = req.file ? '/uploads/' + req.file.filename : ''; // Ruta pública
 
     const nuevoProducto = new Producto({
       nombre,
@@ -118,6 +140,29 @@ app.post('/productos', verificarSesion, upload.single('imagen'), async (req, res
   }
 });
 
+
+// app.post('/productos', verificarSesion, upload.single('imagen'), async (req, res) => {
+//   try {
+//     const { nombre, descripcion, precio } = req.body;
+//     const imagen = req.file ? '/uploads/' + req.file.filename : ''; // Ruta pública
+
+//     const nuevoProducto = new Producto({
+//       nombre,
+//       descripcion,
+//       precio:parseFloat(precio),
+//       imagen,
+//       creadoPor: req.session.usuario
+//     });
+
+//     await nuevoProducto.save();
+//     res.status(201).send('Producto creado');
+//   } catch (err) {
+//     res.status(500).send('Error al guardar producto');
+//   }
+// });
+
+
+// Actualizar producto
 app.put('/productos/:id', verificarSesion, async (req, res) => {
   await Producto.findOneAndUpdate(
     { _id: req.params.id, creadoPor: req.session.usuario },
@@ -126,6 +171,7 @@ app.put('/productos/:id', verificarSesion, async (req, res) => {
   res.send('Producto actualizado');
 });
 
+// Eliminar producto
 app.delete('/productos/:id', verificarSesion, async (req, res) => {
   await Producto.findOneAndDelete({ _id: req.params.id, creadoPor: req.session.usuario });
   res.send('Producto eliminado');
@@ -133,7 +179,7 @@ app.delete('/productos/:id', verificarSesion, async (req, res) => {
 
 app.post('/facturar', verificarSesion, async (req, res) => {
   try {
-    const compras = req.body.compras;
+    const compras = req.body.compras; // Array de { id, cantidad }
 
     for (const item of compras) {
       await Producto.findByIdAndUpdate(item.id, {
@@ -147,6 +193,10 @@ app.post('/facturar', verificarSesion, async (req, res) => {
     res.status(500).send('Error al procesar la factura');
   }
 });
+
+
+
+
 
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;
