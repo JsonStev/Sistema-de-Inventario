@@ -22,6 +22,11 @@ app.use(session({
   saveUninitialized: false
 }));
 
+// Modelos
+const Usuario = require('./models/Usuario');
+const Producto = require('./models/Producto');
+const verificarSesion = require('./middlewares/verificarSesion');
+
 // MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('📦 Conectado a MongoDB'))
