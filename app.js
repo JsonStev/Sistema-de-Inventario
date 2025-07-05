@@ -5,7 +5,7 @@ const session = require('express-session');
 const multer = require('multer');
 const path = require('path');
 require('dotenv').config();
-app.use(express.json())
+//app.use(express.json())
 
 // Inicializar Express
 const app = express();
