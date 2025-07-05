@@ -93,6 +93,8 @@ function mostrarProductos(productos) {
    const nombre = document.getElementById('editarNombre').value;
    const descripcion = document.getElementById('editarDescripcion').value;
    const precio = parseFloat(document.getElementById('editarPrecio').value);
+   const fechaVencimiento = new Date(p.fechaVencimiento).toLocaleDateString()(document.getElementById('fechaVencimiento'))
+   const cantidad = parseFloat(document.getElementById('cantidad'))
 
    try {
      const res = await fetch(`/productos/${id}`, {

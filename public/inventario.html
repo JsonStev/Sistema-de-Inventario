@@ -44,11 +44,15 @@
     <form id="formEditar">
       <input type="hidden" id="editarId">
       <h3>Nombre</h3>
-      <input id="editarNombre" name="nombre" placeholder="Nombre" required><br><br>
+      <input id="editarNombre" name="nombre" placeholder="Nombre" required><br>
       <h3>Descripción</h3>
-      <input id="editarDescripcion" name="descripcion" placeholder="Descripción"><br><br>
+      <input id="editarDescripcion" name="descripcion" placeholder="Descripción"><br>
       <h3>Precio</h3>
-      <input id="editarPrecio" name="precio" type="number" placeholder="Precio" required><br><br>
+      <input id="editarPrecio" name="precio" type="number" placeholder="Precio" required><br>
+      <h3>Fecha de Vencimiento</h3>
+      <input id="fechaVencimiento" name="fechaVencimiento" type="date" placeholder="Fecha de Vencimiento" required><br>
+      <h3>Cantidad</h3>
+      <input id="cantidad" name="cantidad" type="number" placeholder="Cantidad" required><br>
       <button type="submit">Guardar cambios</button>
       <button type="button" onclick="cerrarModal()">Cancelar</button>
     </form>

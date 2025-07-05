@@ -161,19 +161,50 @@ app.post('/productos', verificarSesion, upload.single('imagen'), async (req, res
 
 
 // Actualizar producto
+
 app.put('/productos/:id', verificarSesion, async (req, res) => {
-  await Producto.findOneAndUpdate(
-    { _id: req.params.id, creadoPor: req.session.usuario },
-    req.body
-  );
-  res.send('Producto actualizado');
+  try {
+    const { nombre, descripcion, precio, cantidad, fechaVencimiento } = req.body;
+
+    await Producto.findByIdAndUpdate(req.params.id, {
+      nombre,
+      descripcion,
+      precio,
+      cantidad,
+      fechaVencimiento: new Date(fechaVencimiento)
+    });
+
+    res.status(200).send('Producto actualizado');
+  } catch (err) {
+    console.error('Error al actualizar producto:', err);
+    res.status(500).send('Error');
+  }
 });
 
+// app.put('/productos/:id', verificarSesion, async (req, res) => {
+//   await Producto.findOneAndUpdate(
+//     { _id: req.params.id, creadoPor: req.session.usuario },
+//     req.body
+//   );
+//   res.send('Producto actualizado');
+// });
+
 // Eliminar producto
+
 app.delete('/productos/:id', verificarSesion, async (req, res) => {
-  await Producto.findOneAndDelete({ _id: req.params.id, creadoPor: req.session.usuario });
-  res.send('Producto eliminado');
+  try {
+    await Producto.findByIdAndDelete(req.params.id);
+    res.status(200).send('Producto eliminado');
+  } catch (err) {
+    console.error('Error al eliminar producto:', err);
+    res.status(500).send('Error');
+  }
 });
+
+// app.delete('/productos/:id', verificarSesion, async (req, res) => {
+//   await Producto.findOneAndDelete({ _id: req.params.id, creadoPor: req.session.usuario });
+//   res.send('Producto eliminado');
+// });
 
 app.post('/facturar', verificarSesion, async (req, res) => {
   try {
