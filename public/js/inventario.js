@@ -38,20 +38,29 @@ function mostrarProductos(productos) {
   contenedor.innerHTML = '';
 
   productos.forEach(p => {
-  const div = document.createElement("div");
-  div.className = "producto";
-  div.innerHTML = `
-    <img src="${p.imagen}" />
-    <h4>${p.nombre}</h4>
-    <p>${p.descripcion}</p>
-    <p>Precio: C$${p.precio}</p>
-    <p>Cantidad: ${p.cantidad}</p>
-    <p>Vence: ${new Date(p.fechaVencimiento).toLocaleDateString()}</p>
-    <button onclick='abrirModal(${JSON.stringify(p)})'>✏️ Editar</button>
-    <button onclick='eliminarProducto("${p._id}")'>🗑️ Eliminar</button>
-  `;
-  contenedor.appendChild(div);
-});
+    const div = document.createElement("div");
+    div.className = "producto";
+    
+    const imagenUrl = p.imagen ? p.imagen : './assets/placeholder.png'; // Evitar imágenes rotas
+
+    div.innerHTML = `
+      <div class="img-container">
+        <img src="${imagenUrl}" alt="Imagen de ${p.nombre}">
+      </div>
+      <strong>${p.nombre}</strong>
+      <p style="font-size:0.85rem;">${p.descripcion || 'Sin descripción'}</p>
+      <div style="margin: 0.5rem 0;">
+        <span style="color:var(--accent-success);font-weight:600;">C$ ${p.precio.toFixed(2)}</span>
+        <br>
+        <span style="font-size:0.85rem;color:var(--text-secondary);">Stock: ${p.cantidad}</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px; margin-top:auto;">
+        <button onclick='abrirModal(${JSON.stringify(p)})'>✏️ Editar</button>
+        <button class="btn-eliminar" onclick='eliminarProducto("${p._id}")'>🗑️ Eliminar</button>
+      </div>
+    `;
+    contenedor.appendChild(div);
+  });
 
 
   // productos.forEach(p => {

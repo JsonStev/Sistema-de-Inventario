@@ -128,11 +128,20 @@ function renderProductos() {
   productos.forEach(prod => {
     const div = document.createElement("div");
     div.className = "producto";
+    
+    const imagenUrl = prod.imagen ? prod.imagen : './assets/placeholder.png';
+    
     div.innerHTML = `
-      <img src="${prod.imagen || 'https://via.placeholder.com/100'}" alt="${prod.nombre}" />
-      <h4>${prod.nombre}</h4>
-      <p>C$${prod.precio}</p>
-      <button onclick="agregarProducto('${prod._id}')">Comprar</button>
+      <div class="img-container">
+        <img src="${imagenUrl}" alt="Imagen de ${prod.nombre}">
+      </div>
+      <strong>${prod.nombre}</strong>
+      <div style="margin: 0.5rem 0;">
+        <span style="color:var(--accent-success);font-weight:600;">C$ ${prod.precio.toFixed(2)}</span>
+        <br>
+        <span style="font-size:0.85rem;color:var(--text-secondary);">Stock: ${prod.cantidad || 0}</span>
+      </div>
+      <button style="margin-top:auto;" onclick="agregarProducto('${prod._id}')">🛒 Agregar</button>
     `;
     contenedorProductos.appendChild(div);
   });
