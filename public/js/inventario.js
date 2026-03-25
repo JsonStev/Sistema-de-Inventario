@@ -42,7 +42,7 @@ function mostrarProductos(productos) {
   productos.forEach(p => {
     const div = document.createElement("div");
     div.className = "producto";
-    
+
     const imagenUrl = p.imagen ? p.imagen : './assets/placeholder.png'; // Evitar imágenes rotas
 
     div.innerHTML = `
@@ -64,10 +64,10 @@ function mostrarProductos(productos) {
     contenedor.appendChild(div);
   });
 
-//<p>Vence: ${new Date(p.fechaVencimiento).toLocaleDateString()}</p>
-//<p>Cantidad: ${p.cantidad}</p>
-    //<p>Vence: ${new Date(p.fechaVencimiento).toLocaleDateString()}</p>
-    // <button onclick='abrirModal(${JSON.stringify(p)})'>✏️ Editar</button>
+  //<p>Vence: ${new Date(p.fechaVencimiento).toLocaleDateString()}</p>
+  //<p>Cantidad: ${p.cantidad}</p>
+  //<p>Vence: ${new Date(p.fechaVencimiento).toLocaleDateString()}</p>
+  // <button onclick='abrirModal(${JSON.stringify(p)})'>✏️ Editar</button>
 
   // productos.forEach(p => {
   //   const div = document.createElement('div');
@@ -88,52 +88,45 @@ function mostrarProductos(productos) {
   // });
 }
 
- function abrirModal(producto) {
-   document.getElementById('modalEditar').style.display = 'flex';
+function abrirModal(producto) {
+  document.getElementById('modalEditar').style.display = 'flex';
 
-   document.getElementById('editarId').value = producto._id;
-   document.getElementById('editarNombre').value = producto.nombre;
-   document.getElementById('editarDescripcion').value = producto.descripcion || '';
-   document.getElementById('editarPrecio').value = producto.precio;
-   document.getElementById('editarCantidad').value = producto.cantidad;
-   document.getElementById('editarFechaVencimiento').value = new Date(producto.fechaVencimiento).toISOString().split('T')[0];   
+  document.getElementById('editarId').value = producto._id;
+  document.getElementById('editarNombre').value = producto.nombre;
+  document.getElementById('editarDescripcion').value = producto.descripcion || '';
+  document.getElementById('editarPrecio').value = producto.precio;
+  document.getElementById('editarCantidad').value = producto.cantidad;
+  document.getElementById('editarFechaVencimiento').value = new Date(producto.fechaVencimiento).toISOString().split('T')[0];
 
- }
+}
 
- function cerrarModal() {
-   document.getElementById('modalEditar').style.display = 'none';
- }
+function cerrarModal() {
+  document.getElementById('modalEditar').style.display = 'none';
+}
 
- document.getElementById('formEditar').addEventListener('submit', async (e) => {
-   e.preventDefault();
+document.getElementById('formEditar').addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-   const id = document.getElementById('editarId').value;
-   const datos = {
-     nombre: document.getElementById('editarNombre').value,
-     descripcion: document.getElementById('editarDescripcion').value,
-     precio: parseFloat(document.getElementById('editarPrecio').value),
-     cantidad: parseInt(document.getElementById('editarCantidad').value) || 0,
-     fechaVencimiento: document.getElementById('editarFechaVencimiento').value || new Date().toISOString()
-   };
+  const id = document.getElementById('editarId').value;
+  const formData = new FormData(e.target);
 
-   try {
-     const res = await fetch(`/productos/${id}`, {
-       method: 'PUT',
-       headers: { 'Content-Type': 'application/json' },
-       body: JSON.stringify(datos)
-     });
+  try {
+    const res = await fetch(`/productos/${id}`, {
+      method: 'PUT',
+      body: formData
+    });
 
-     if (res.ok) {
-       alert('Producto actualizado');
-       cerrarModal();
-       await cargarProductos();
-     } else {
-       alert('Error al actualizar');
-     }
-   } catch (err) {
-     console.error(err);
-   }
- });
+    if (res.ok) {
+      alert('Producto actualizado');
+      cerrarModal();
+      await cargarProductos();
+    } else {
+      alert('Error al actualizar');
+    }
+  } catch (err) {
+    console.error(err);
+  }
+});
 
 
 async function eliminarProducto(id) {

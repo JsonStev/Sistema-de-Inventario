@@ -169,17 +169,22 @@ app.post('/productos', verificarSesion, upload.single('imagen'), async (req, res
 
 // Actualizar producto
 
-app.put('/productos/:id', verificarSesion, async (req, res) => {
+app.put('/productos/:id', verificarSesion, upload.single('imagen'), async (req, res) => {
   try {
     const { nombre, descripcion, precio, cantidad, fechaVencimiento } = req.body;
-
-    await Producto.findByIdAndUpdate(req.params.id, {
+    const datosActualizados = {
       nombre,
       descripcion,
-      precio,
-      cantidad,
+      precio: parseFloat(precio),
+      cantidad: parseInt(cantidad),
       fechaVencimiento: new Date(fechaVencimiento)
-    });
+    };
+    
+    if (req.file) {
+      datosActualizados.imagen = '/uploads/' + req.file.filename;
+    }
+
+    await Producto.findByIdAndUpdate(req.params.id, datosActualizados);
     res.status(200).send('Producto actualizado');
   } catch (err) {
     console.error('Error al actualizar producto:', err);
