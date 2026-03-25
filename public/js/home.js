@@ -14,9 +14,18 @@ async function cargarDashboard() {
     data.ultimos.forEach(p => {
       const div = document.createElement('div');
       div.className = 'producto-mini';
+      
+      const imagenUrl = p.imagen ? p.imagen : './assets/placeholder.png'; // Imagen por defecto si no hay 
+      
       div.innerHTML = `
-        <img src="${p.imagen}" style="width:80px; height:80px;" alt="${p.nombre}" />
-        <p><strong>${p.nombre}</strong><br>C$${p.precio}</p>
+        <div class="img-container">
+          <img src="${imagenUrl}" alt="Imagen de ${p.nombre}">
+        </div>
+        <div class="producto-info">
+          <h4>${p.nombre}</h4>
+          <p>En stock: <strong>${p.cantidad || 0}</strong></p>
+          <div class="producto-precio">C$ ${p.precio.toFixed(2)}</div>
+        </div>
       `;
       contenedor.appendChild(div);
     });

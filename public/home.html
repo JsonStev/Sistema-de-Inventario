@@ -4,30 +4,60 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard - Sistema de Inventario</title>
+  <title>Dashboard | Sistema de Inventario</title>
+
+  <!-- Fuente Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="./css/home.css" />
 </head>
 <body>
+  
   <header>
-    <h1>Bienvenido, <span id="nombreUsuario">Usuario</span></h1>
-    <button onclick="cerrarSesion()">Cerrar sesión</button>
+    <h1>📋 Dashboard de Control | <span id="nombreUsuario">Usuario</span></h1>
+    <button onclick="cerrarSesion()" class="btn btn-danger">Cerrar sesión</button>
   </header>
 
   <main>
+    
+    <!-- Navegación Rápida Estilo Tarjetas -->
+    <section>
+      <h2>Acciones Rápidas</h2>
+      <nav class="acciones-rapidas">
+        <a href="/inventario.html" class="btn-nav">
+          <span class="icon">📦</span>
+          Ir al Inventario
+        </a>
+        <a href="/factura.html" class="btn-nav">
+          <span class="icon">🧾</span>
+          Nueva Facturación
+        </a>
+      </nav>
+    </section>
+
+    <!-- Sección de Estadísticas Principales -->
+    <section>
+      <h2>Resumen de Estadísticas</h2>
+      <div class="estadisticas-container">
+        <div class="stat-box">
+          <h3>Total de Productos</h3>
+          <p id="totalProductos">0</p>
+        </div>
+        <!-- Aquí se pueden agregar más stat-boxes en el futuro como "Valor del Inventario" o "Productos bajos en stock" -->
+      </div>
+    </section>
+
+    <!-- Grilla de últimos productos -->
     <section>
       <h2>Últimos productos agregados</h2>
-      <div id="ultimosProductos" class="grid-productos"></div>
+      <div id="ultimosProductos" class="grid-productos">
+        <!-- Renderizado dinámico desde JS -->
+        <p style="color: var(--text-secondary); grid-column: 1 / -1;">Cargando inventario reciente...</p>
+      </div>
     </section>
 
-    <section>
-      <h2>Estadísticas</h2>
-      <p>Total de productos: <span id="totalProductos">0</span></p>
-    </section>
-
-    <nav>
-      <a href="/inventario.html">📦 Inventario</a> |
-      <a href="/factura.html">🧾 Facturación</a>
-    </nav>
   </main>
 
   <script src="js/home.js"></script>
