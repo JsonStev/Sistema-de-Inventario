@@ -156,5 +156,22 @@ async function eliminarProducto(id) {
 }
 
 
+const buscador = document.getElementById("buscador");
+
+// Búsqueda dinámica
+if (buscador) {
+  buscador.addEventListener("input", () => {
+    const texto = buscador.value.toLowerCase();
+    const tarjetas = document.querySelectorAll(".producto");
+    tarjetas.forEach(tarjeta => {
+      const nombreElement = tarjeta.querySelector("strong");
+      if (nombreElement) {
+        const nombre = nombreElement.textContent.toLowerCase();
+        tarjeta.style.display = nombre.includes(texto) ? "flex" : "none";
+      }
+    });
+  });
+}
+
 // Al cargar la página
 cargarProductos();
