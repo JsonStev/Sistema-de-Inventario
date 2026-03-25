@@ -5,6 +5,7 @@ const session = require('express-session');
 const multer = require('multer');
 const path = require('path');
 require('dotenv').config();
+//app.use(express.json())
 
 // Inicializar Express
 const app = express();
@@ -179,7 +180,6 @@ app.put('/productos/:id', verificarSesion, async (req, res) => {
       cantidad,
       fechaVencimiento: new Date(fechaVencimiento)
     });
-
     res.status(200).send('Producto actualizado');
   } catch (err) {
     console.error('Error al actualizar producto:', err);

@@ -1,3 +1,5 @@
+// const Producto = require("../../models/Producto");
+
 const formProducto = document.getElementById('formProducto');
 const contenedor = document.getElementById('productos');
 
@@ -62,6 +64,10 @@ function mostrarProductos(productos) {
     contenedor.appendChild(div);
   });
 
+//<p>Vence: ${new Date(p.fechaVencimiento).toLocaleDateString()}</p>
+//<p>Cantidad: ${p.cantidad}</p>
+    //<p>Vence: ${new Date(p.fechaVencimiento).toLocaleDateString()}</p>
+    // <button onclick='abrirModal(${JSON.stringify(p)})'>✏️ Editar</button>
 
   // productos.forEach(p => {
   //   const div = document.createElement('div');
@@ -89,6 +95,9 @@ function mostrarProductos(productos) {
    document.getElementById('editarNombre').value = producto.nombre;
    document.getElementById('editarDescripcion').value = producto.descripcion || '';
    document.getElementById('editarPrecio').value = producto.precio;
+   document.getElementById('editarCantidad').value = producto.cantidad;
+   document.getElementById('editarFechaVencimiento').value = new Date(producto.fechaVencimiento).toISOString().split('T')[0];   
+
  }
 
  function cerrarModal() {
@@ -99,23 +108,25 @@ function mostrarProductos(productos) {
    e.preventDefault();
 
    const id = document.getElementById('editarId').value;
-   const nombre = document.getElementById('editarNombre').value;
-   const descripcion = document.getElementById('editarDescripcion').value;
-   const precio = parseFloat(document.getElementById('editarPrecio').value);
-   const fechaVencimiento = new Date(p.fechaVencimiento).toLocaleDateString()(document.getElementById('fechaVencimiento'))
-   const cantidad = parseFloat(document.getElementById('cantidad'))
+   const datos = {
+     nombre: document.getElementById('editarNombre').value,
+     descripcion: document.getElementById('editarDescripcion').value,
+     precio: parseFloat(document.getElementById('editarPrecio').value),
+     cantidad: parseInt(document.getElementById('editarCantidad').value) || 0,
+     fechaVencimiento: document.getElementById('editarFechaVencimiento').value || new Date().toISOString()
+   };
 
    try {
      const res = await fetch(`/productos/${id}`, {
        method: 'PUT',
        headers: { 'Content-Type': 'application/json' },
-       body: JSON.stringify({ nombre, descripcion, precio })
+       body: JSON.stringify(datos)
      });
 
      if (res.ok) {
        alert('Producto actualizado');
        cerrarModal();
-       cargarProductos();
+       await cargarProductos();
      } else {
        alert('Error al actualizar');
      }
