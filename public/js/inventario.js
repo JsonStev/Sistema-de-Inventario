@@ -1,5 +1,3 @@
-// const Producto = require("../../models/Producto");
-
 const formProducto = document.getElementById('formProducto');
 const contenedor = document.getElementById('productos');
 
@@ -63,29 +61,6 @@ function mostrarProductos(productos) {
     `;
     contenedor.appendChild(div);
   });
-
-  //<p>Vence: ${new Date(p.fechaVencimiento).toLocaleDateString()}</p>
-  //<p>Cantidad: ${p.cantidad}</p>
-  //<p>Vence: ${new Date(p.fechaVencimiento).toLocaleDateString()}</p>
-  // <button onclick='abrirModal(${JSON.stringify(p)})'>✏️ Editar</button>
-
-  // productos.forEach(p => {
-  //   const div = document.createElement('div');
-  //   div.className = 'producto';
-  //   div.innerHTML = `
-  //     <img src="${p.imagen}" alt="${p.nombre}" style="width:150px;height:150px;">
-  //     <p>${p.nombre}</p>
-  //     <p><strong>Precio:</strong> C$${p.precio}</p>
-  //     <p><strong>Descripción:</strong> ${p.descripcion || 'Sin descripción'}</p>
-  //     <p>Cantidad: ${prod.cantidad}</p>
-  //     <p>Vence: ${new Date(prod.fechaVencimiento).toLocaleDateString()}</p>
-  //     <div style="margin-top: 10px;">
-  //       <button onclick='abrirModal(${JSON.stringify(p)})'>✏️ Editar</button>
-  //       <button onclick="eliminarProducto('${p._id}')">🗑️ Eliminar</button>
-  //     </div>
-  //   `;
-  //   contenedor.appendChild(div);
-  // });
 }
 
 function abrirModal(producto) {
