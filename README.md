@@ -133,6 +133,7 @@ Sistema-de-Inventario/
 
 ---
 
-## 👤 Autor
+## 👤 Autores
 
+**Anarielis** — [@Anarielis](https://github.com/Anarielis)
 **Jason Stev** — [@JsonStev](https://github.com/JsonStev)
